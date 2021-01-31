@@ -29,22 +29,22 @@ class LightTypeTagTest extends TagAssertions {
   import TestModel._
 
   "lightweight type tags" should {
-//    "support human-readable representation" in {
-////      assertRepr(
-////        LTT[Int { def a(k: String): Int; val b: String; type M1 = W1; type M2 <: W2; type M3[A] = Either[Unit, A] }],
-////        "(Int & {def a(String): Int, def b(): String, type M1 = TestModel::W1, type M2 = M2|<Nothing..TestModel::W2>, type M3 = λ %0 → Either[+Unit,+0]})"
-////      )
+    "support human-readable representation" in {
+//      assertRepr(
+//        LTT[Int { def a(k: String): Int; val b: String; type M1 = W1; type M2 <: W2; type M3[A] = Either[Unit, A] }],
+//        "(Int & {def a(String): Int, def b(): String, type M1 = TestModel::W1, type M2 = M2|<Nothing..TestModel::W2>, type M3 = λ %0 → Either[+Unit,+0]})"
+//      )
 //      assertRepr(LTT[I1 with (I1 with (I1 with W1))], "{TestModel::I1 & TestModel::W1}")
 //      assertRepr(`LTT[_]`[R1], "λ %0 → TestModel::R1[=0]")
-//      assertRepr(`LTT[_]`[Nothing], "Nothing")
-//      assertRepr(LTT[Int], "Int")
-//      assertRepr(LTT[List[Int]], "List[+Int]")
+      assertRepr(`LTT[_]`[Nothing], "Nothing")
+      assertRepr(LTT[Int], "Int")
+      assertRepr(LTT[List[Int]], "List[+Int]")
 //      assertRepr(LTT[Id[Int]], "Int")
-//      assertRepr(LTT[FP[Int]], "List[+Int]")
+      assertRepr(LTT[FP[Int]], "List[+Int]")
 //      assertRepr(`LTT[_]`[L], "λ %0 → List[+0]")
 //      assertRepr(`LTT[_]`[Either[Unit, *]], "λ %0 → Either[+Unit,+0]")
 //      assertRepr(`LTT[_]`[S[Unit, *]], "λ %0 → Either[+0,+Unit]")
-//    }
+    }
 
     "support typetag combination" in {
       assertCombine(`LTT[_[_]]`[T1], `LTT[_]`[Id], LTT[T1[Id]])
@@ -86,12 +86,12 @@ class LightTypeTagTest extends TagAssertions {
       assertChild(LTT[F2[I2]], LTT[F1[I1]])
 //      assertChild(LTT[FT2[IT2]], LTT[FT1[IT1]])
 //      assertChild(`LTT[_[_[_]]]`[FT2].combine(`LTT[_[_]]`[IT2]), LTT[FT1[IT1]])
-//      assertDifferent(`LTT[_[_[_]]]`[FT2].combine(`LTT[_[_]]`[IT2]), LTT[FT1[IT1]])
-//      assertChild(`LTT[_[_[_]]]`[FT2].combine(`LTT[_[_]]`[IT1]), LTT[FT1[IT1]])
-//      assertDifferent(`LTT[_[_[_]]]`[FT2].combine(`LTT[_[_]]`[IT1]), LTT[FT1[IT1]])
+      assertDifferent(`LTT[_[_[_]]]`[FT2].combine(`LTT[_[_]]`[IT2]), LTT[FT1[IT1]])
+      assertChild(`LTT[_[_[_]]]`[FT2].combine(`LTT[_[_]]`[IT1]), LTT[FT1[IT1]])
+      assertDifferent(`LTT[_[_[_]]]`[FT2].combine(`LTT[_[_]]`[IT1]), LTT[FT1[IT1]])
 //      assertChild(`LTT[_[_[_]]]`[FT1].combine(`LTT[_[_]]`[IT2]), LTT[FT1[IT1]])
-//      assertDifferent(`LTT[_[_[_]]]`[FT1].combine(`LTT[_[_]]`[IT2]), LTT[FT1[IT1]])
-//      assertSame(`LTT[_[_[_]]]`[FT1].combine(`LTT[_[_]]`[IT1]), LTT[FT1[IT1]])
+      assertDifferent(`LTT[_[_[_]]]`[FT1].combine(`LTT[_[_]]`[IT2]), LTT[FT1[IT1]])
+      assertSame(`LTT[_[_[_]]]`[FT1].combine(`LTT[_[_]]`[IT1]), LTT[FT1[IT1]])
 
       assertChild(LTT[FT2[IT2]], LTT[FT1[IT2]])
 
@@ -116,7 +116,7 @@ class LightTypeTagTest extends TagAssertions {
       type X[A >: H4 <: H2] = Option[A]
       //assertNotChild(LTT[Option[H5]], `LTT[A,B,_>:B<:A]`[H2, H4, X])
       // allTypeReferences: we need to use tpe.etaExpand but 2.13 has a bug: https://github.com/scala/bug/issues/11673#
-      //assertChild(LTT[Option[H3]], `LTT[A,B,_>:B<:A]`[H2, H4, X])
+      assertChild(LTT[Option[H3]], `LTT[A,B,_>:B<:A]`[H2, H4, X])
 
       assertChild(`LTT[_[_],_[_]]`[P1].combine(`LTT[_]`[X1], `LTT[_]`[X2]), LTT[P0[X2, X1]])
       assertNotChild(`LTT[_[_],_[_]]`[P1].combine(`LTT[_]`[X1], `LTT[_]`[X2]), LTT[P0[X1, X2]])
@@ -342,12 +342,12 @@ class LightTypeTagTest extends TagAssertions {
 //      assertNotChild(LTT[Z.X#A], LTT[a1.A])
 //    }
 
-//    "resolve comparisons of object and trait with the same name" in {
-//      assertNotChild(LTT[YieldOpCounts.type], LTT[RoleChild[Either]])
+    "resolve comparisons of object and trait with the same name" in {
+      assertNotChild(LTT[YieldOpCounts.type], LTT[RoleChild[Either]])
 //      assertChild(LTT[YieldOpCounts.type], LTT[YieldOpCounts])
-//      assertDifferent(LTT[YieldOpCounts.type], LTT[YieldOpCounts])
-//      assertNotChild(LTT[YieldOpCounts], LTT[YieldOpCounts.type])
-//    }
+      assertDifferent(LTT[YieldOpCounts.type], LTT[YieldOpCounts])
+      assertNotChild(LTT[YieldOpCounts], LTT[YieldOpCounts.type])
+    }
 
 //    "strong summons test" in {
 //      assertTypeError("def x1[T] = LTag[Array[T]]")
